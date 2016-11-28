@@ -213,6 +213,11 @@ int init_dhcpv6(const char *ifname, unsigned int options, int sol_timeout)
 
 	if (setsockopt(sock, SOL_SOCKET, SO_BINDTODEVICE, ifname, strlen(ifname)) < 0)
 		goto failure;
+	if (priority)
+	{
+		if (setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &priority, sizeof(priority)) < 0)
+			goto failure;
+	}
 
 	struct sockaddr_in6 client_addr = { .sin6_family = AF_INET6,
 		.sin6_port = htons(DHCPV6_CLIENT_PORT), .sin6_flowinfo = 0 };

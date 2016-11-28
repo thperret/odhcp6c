@@ -373,6 +373,8 @@ size_t odhcp6c_remove_state(enum odhcp6c_state state, size_t offset, size_t len)
 void* odhcp6c_move_state(enum odhcp6c_state state, size_t *len);
 void* odhcp6c_get_state(enum odhcp6c_state state, size_t *len);
 
+int priority;
+
 // Entry manipulation
 bool odhcp6c_update_entry(enum odhcp6c_state state, struct odhcp6c_entry *new,
 				uint32_t safe, unsigned int holdoff_interval);
