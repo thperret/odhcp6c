@@ -39,6 +39,7 @@ static int usage(void);
 static uint8_t *state_data[_STATE_MAX] = {NULL};
 static size_t state_len[_STATE_MAX] = {0};
 
+int priority = 0;
 static volatile bool signal_io = false;
 static volatile bool signal_usr1 = false;
 static volatile bool signal_usr2 = false;
@@ -75,7 +76,7 @@ int main(_unused int argc, char* const argv[])
 	int c;
 	unsigned int client_options = DHCPV6_CLIENT_FQDN | DHCPV6_ACCEPT_RECONFIGURE;
 
-	while ((c = getopt(argc, argv, "S::N:V:P:FB:c:i:r:Ru:s:kt:m:hedp:fav")) != -1) {
+	while ((c = getopt(argc, argv, "S::N:V:P:FB:c:i:r:Ru:s:kt:m:hedp:favo:")) != -1) {
 		switch (c) {
 		case 'S':
 			allow_slaac_only = (optarg) ? atoi(optarg) : -1;
@@ -212,6 +213,9 @@ int main(_unused int argc, char* const argv[])
 		case 'a':
 			client_options &= ~DHCPV6_ACCEPT_RECONFIGURE;
 			break;
+
+		case 'o':
+			priority = atoi(optarg);
 
 		case 'v':
 			++verbosity;
@@ -443,6 +447,7 @@ static int usage(void)
 	"	-k		Don't send a RELEASE when stopping\n"
 	"	-t <seconds>	Maximum timeout for DHCPv6-SOLICIT (120)\n"
 	"	-m <seconds>	Minimum time between accepting updates (30)\n"
+	"	-o <skb-priority> Set the skb priority (default 0) [0-7]\n"
 	"\nInvocation options:\n"
 	"	-p <pidfile>	Set pidfile (/var/run/odhcp6c.pid)\n"
 	"	-d		Daemonize\n"
