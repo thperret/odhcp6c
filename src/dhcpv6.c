@@ -202,6 +202,10 @@ int init_dhcpv6(const char *ifname, unsigned int options, int sol_timeout)
 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
 	setsockopt(sock, IPPROTO_IPV6, IPV6_RECVPKTINFO, &val, sizeof(val));
 	setsockopt(sock, SOL_SOCKET, SO_BINDTODEVICE, ifname, strlen(ifname));
+	if (priority)
+	{
+		setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &priority, sizeof(priority));
+	}
 
 	struct sockaddr_in6 client_addr = { .sin6_family = AF_INET6,
 		.sin6_port = htons(DHCPV6_CLIENT_PORT), .sin6_flowinfo = 0 };

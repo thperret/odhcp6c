@@ -44,6 +44,7 @@ static size_t *state_custom_opts_len = NULL;
 static uint16_t *state_custom_opts_type = NULL;
 size_t custom_opts_number = 0;
 
+int priority = 0;
 static volatile bool signal_io = false;
 static volatile bool signal_usr1 = false;
 static volatile bool signal_usr2 = false;
@@ -80,7 +81,7 @@ int main(_unused int argc, char* const argv[])
 	int c;
 	unsigned int client_options = DHCPV6_CLIENT_FQDN | DHCPV6_ACCEPT_RECONFIGURE;
 
-	while ((c = getopt(argc, argv, "S::N:V:P:FB:c:i:r:Ru:s:kt:m:hedp:favx:")) != -1) {
+	while ((c = getopt(argc, argv, "S::N:V:P:FB:c:i:r:Ru:s:kt:m:hedp:favx:o:")) != -1) {
 		switch (c) {
 		case 'S':
 			allow_slaac_only = (optarg) ? atoi(optarg) : -1;
@@ -231,6 +232,10 @@ int main(_unused int argc, char* const argv[])
 			if (!l)
 				help=true;
 			odhcp6c_add_custom_state(custom_type, buf, l);
+			break;
+
+		case 'o':
+			priority = atoi(optarg);
 			break;
 
 		case 'v':
@@ -466,6 +471,7 @@ static int usage(void)
 	"	-x OPT:VAL	Include option OPT in sent packets (cumulative)\n"
 	"			OPT must be in decimal and VAL must be in hexadecimal\n"
 	"			Example: -x 11:00:00:00:00:00:00:00:00:00:00:00\n"
+	"	-o <skb-priority> Set the skb priority (default 0) [0-7]\n"
 	"\nInvocation options:\n"
 	"	-p <pidfile>	Set pidfile (/var/run/odhcp6c.pid)\n"
 	"	-d		Daemonize\n"

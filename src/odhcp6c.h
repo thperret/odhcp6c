@@ -352,6 +352,8 @@ void odhcp6c_add_custom_state(enum dhcpv6_opt type, const void *data, size_t len
 void* odhcp6c_get_custom_state(int custom_state_idx, size_t *len, enum dhcpv6_opt *type);
 size_t custom_opts_number;
 
+int priority;
+
 // Entry manipulation
 bool odhcp6c_update_entry(enum odhcp6c_state state, struct odhcp6c_entry *new, uint32_t safe, bool filterexcess);
 
